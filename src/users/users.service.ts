@@ -1,29 +1,43 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UsersRepository } from './users.repository';
 
 @Injectable()
 export class UsersService {
-  constructor() { }
+  constructor(private userRepositery: UsersRepository) { }
 
-  create(createUserDto: CreateUserDto) {
-
+  async create(createUserDto: CreateUserDto) {
+    const { email } = createUserDto;
+    const user = await this.userRepositery.findDublicateUser({ email });
+    if (user) {
+      throw new BadRequestException('Email already exists');
+    }
+    await this.userRepositery.create(createUserDto);
     return
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    return await this.userRepositery.findAll();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} user`;
+    return this.userRepositery.findOne(id);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const user = await this.findOne(id);
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+    return await this.userRepositery.update(id, updateUserDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    const user = await this.findOne(id);
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+    return await this.userRepositery.remove(id);
   }
 }

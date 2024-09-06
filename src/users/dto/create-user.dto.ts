@@ -11,5 +11,5 @@ export class CreateUserDto {
   password: string;
 
   @IsString()
-  location: string;
+  address: string;
 }

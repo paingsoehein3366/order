@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UsersUseCase } from './users.use-caset';
+import { UsersUseCase } from './users.use-cases';
 
 @Controller('users')
 export class UsersController {
@@ -20,16 +20,16 @@ export class UsersController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.usersUseCase.findOne(+id);
+    return this.usersUseCase.findOne(parseInt(id));
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersUseCase.update(+id, updateUserDto);
+    return this.usersUseCase.update(parseInt(id), updateUserDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.usersUseCase.remove(+id);
+    return this.usersUseCase.remove(parseInt(id));
   }
 }

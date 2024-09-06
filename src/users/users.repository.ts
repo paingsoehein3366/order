@@ -1,26 +1,37 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { User } from "./entities/user.entity";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class UsersRepository {
+  constructor(@InjectRepository(User) private repo: Repository<User>) { }
+
   async create(createUserDto: CreateUserDto) {
-    return await this.findAll();
+
+    return await this.repo.save(createUserDto);
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    const [data, count] = await this.repo.findAndCount();
+    return { data, count };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    return await this.repo.findOne({ where: { id } });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async findDublicateUser(filter: { email: string }) {
+    return await this.repo.findOneBy(filter)
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    return await this.repo.update(id, updateUserDto)
+  }
+
+  async remove(id: number) {
+    return await this.repo.delete(id);
   }
 }
