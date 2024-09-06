@@ -10,11 +10,12 @@ export class UsersService {
   async create(createUserDto: CreateUserDto) {
     const { email } = createUserDto;
     const user = await this.userRepositery.findDublicateUser({ email });
+    console.log('user: ', user)
     if (user) {
       throw new BadRequestException('Email already exists');
     }
-    await this.userRepositery.create(createUserDto);
-    return
+
+    return await this.userRepositery.create(createUserDto);
   }
 
   async findAll() {

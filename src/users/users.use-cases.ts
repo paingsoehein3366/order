@@ -1,13 +1,21 @@
-import { Injectable } from "@nestjs/common";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import { UsersService } from "./users.service";
+import { Injectable } from '@nestjs/common';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UsersService } from './users.service';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class UsersUseCase {
-  constructor(private userService: UsersService) { }
+  constructor(
+    private userService: UsersService,
+    private authService: AuthService,
+  ) { }
   async create(createUserDto: CreateUserDto) {
-    return await this.userService.create(createUserDto);
+    return await this.authService.create(createUserDto);
+  }
+
+  async login(createUserDto: CreateUserDto) {
+    return await this.authService.login(createUserDto)
   }
 
   async findAll() {
