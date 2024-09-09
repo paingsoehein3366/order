@@ -30,7 +30,6 @@ export class AuthService {
   async login(createUserDto: CreateUserDto) {
     const { email, password } = createUserDto;
     const user = await this.usersRepository.findDublicateUser({ email });
-    console.log('user: ', user)
     if (!user) {
       throw new BadRequestException('User not found');
     }
