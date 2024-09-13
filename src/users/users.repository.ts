@@ -3,19 +3,23 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./entities/user.entity";
-import { Repository } from "typeorm";
+import { Repository, ILike } from "typeorm";
 
 @Injectable()
 export class UsersRepository {
   constructor(@InjectRepository(User) private repo: Repository<User>) { }
 
   async create(createUserDto: CreateUserDto) {
-
     return await this.repo.save(createUserDto);
   }
 
-  async findAll() {
-    const [data, count] = await this.repo.findAndCount();
+  async findAll(skip: number, limit: number, search: string) {
+    const [data, count] = await this.repo.findAndCount({
+      order: { createdAt: "DESC" },
+      take: limit,
+      skip: skip,
+      where: search ? { address: ILike(`%${search}%`) } : undefined,
+    });
     return { data, count };
   }
 

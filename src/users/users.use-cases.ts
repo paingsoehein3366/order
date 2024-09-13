@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 import { AuthService } from './auth.service';
+import { GetUserQueryDto } from './dto/get-user-query.dto';
 
 @Injectable()
 export class UsersUseCase {
@@ -18,8 +19,8 @@ export class UsersUseCase {
     return await this.authService.login(createUserDto)
   }
 
-  async findAll() {
-    return await this.userService.findAll();
+  async findAll(query: GetUserQueryDto) {
+    return await this.userService.findAll(query);
   }
 
   async findOne(id: number) {

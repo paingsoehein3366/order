@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersRepository } from './users.repository';
+import { GetUserQueryDto } from './dto/get-user-query.dto';
 
 @Injectable()
 export class UsersService {
@@ -18,8 +19,9 @@ export class UsersService {
     return await this.userRepositery.create(createUserDto);
   }
 
-  async findAll() {
-    return await this.userRepositery.findAll();
+  async findAll(query: GetUserQueryDto) {
+    const { skip, limit, search } = query;
+    return await this.userRepositery.findAll(skip, limit, search);
   }
 
   findOne(id: number) {

@@ -7,11 +7,13 @@ import {
   Param,
   Delete,
   Session,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersUseCase } from './users.use-cases';
+import { GetUserQueryDto } from './dto/get-user-query.dto';
 
 @Controller('users')
 export class UsersController {
@@ -55,8 +57,8 @@ export class UsersController {
   }
 
   @Get()
-  findAll() {
-    return this.usersUseCase.findAll();
+  findAll(@Query() query: GetUserQueryDto) {
+    return this.usersUseCase.findAll(query);
   }
 
   @Get(':id')
