@@ -3,7 +3,7 @@ import { UsersRepository } from './users.repository';
 import { UsersService } from './users.service';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { promisify } from 'util';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto, LoginUserDto } from './dto/create-user.dto';
 
 const scrypt = promisify(_scrypt);
 
@@ -27,8 +27,8 @@ export class AuthService {
     return await this.usersService.create({ ...createUserDto, password: result });
   }
 
-  async login(createUserDto: CreateUserDto) {
-    const { email, password } = createUserDto;
+  async login(loginUserDto: LoginUserDto) {
+    const { email, password } = loginUserDto;
     const user = await this.usersRepository.findDublicateUser({ email });
     if (!user) {
       throw new BadRequestException('User not found');

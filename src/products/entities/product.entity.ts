@@ -1,6 +1,14 @@
-import { Category } from "src/category/entities/category.entity";
-import { User } from "src/users/entities/user.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Category } from 'src/category/entities/category.entity';
+import { User } from 'src/users/entities/user.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity({ name: 'products' })
 export class Product {
@@ -19,11 +27,11 @@ export class Product {
   @Column()
   image_url: string;
 
-  @Column({ name: 'user_id' })
-  userId: number;
+  @Column()
+  user_id: number;
 
-  @Column({ name: 'category_id' })
-  categoryId: number;
+  @Column()
+  category_id: number;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
@@ -31,9 +39,11 @@ export class Product {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @ManyToOne(() => Category, (category) => category.products)
+  @ManyToOne(() => Category)
+  @JoinColumn({ name: 'category_id' })
   category: Category;
 
   @ManyToOne(() => User, (user) => user.products)
+  @JoinColumn({ name: 'user_id' })
   user: User;
 }

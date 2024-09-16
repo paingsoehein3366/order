@@ -10,7 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto, LoginUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersUseCase } from './users.use-cases';
 import { GetUserQueryDto } from './dto/get-user-query.dto';
@@ -40,8 +40,8 @@ export class UsersController {
   }
 
   @Post('login')
-  async login(@Body() createUserDto: CreateUserDto, @Session() session: any) {
-    const user = await this.usersUseCase.login(createUserDto);
+  async login(@Body() loginUserDto: LoginUserDto, @Session() session: any) {
+    const user = await this.usersUseCase.login(loginUserDto);
     session.userId = user.id;
     return user;
   }

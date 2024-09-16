@@ -15,7 +15,6 @@ export class UsersService {
     if (user) {
       throw new BadRequestException('Email already exists');
     }
-
     return await this.userRepositery.create(createUserDto);
   }
 

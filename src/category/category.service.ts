@@ -1,18 +1,20 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Category } from './entities/category.entity';
-import { Repository } from 'typeorm';
+import { BadRequestException, Injectable } from "@nestjs/common";
+import { CreateCategoryDto } from "./dto/create-category.dto";
+import { UpdateCategoryDto } from "./dto/update-category.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Category } from "./entities/category.entity";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class CategoryService {
-  constructor(@InjectRepository(Category) private categoryRepositery: Repository<Category>) { }
-  async create(createCategoryDto: CreateCategoryDto, user_id: number) {
-    if (!user_id) {
-      throw new BadRequestException('User not found');
-    }
-    return await this.categoryRepositery.save({ ...createCategoryDto, user_id });
+  constructor(
+    @InjectRepository(Category)
+    private categoryRepositery: Repository<Category>,
+  ) { }
+  async create(createCategoryDto: CreateCategoryDto,) {
+    console.log("createCategoryDto: ", createCategoryDto);
+
+    return await this.categoryRepositery.save(createCategoryDto);
   }
 
   async findAll(query) {
@@ -22,13 +24,14 @@ export class CategoryService {
       take: limit,
       skip: skip,
       where: search ? { name: search } : undefined,
-    })
-    return { data, count }
+      relations: ['products'],
+    });
+    return { data, count };
   }
 
   async findOne(id: number) {
     if (!id) {
-      throw new BadRequestException('Category not found');
+      throw new BadRequestException("Category not found");
     }
     return await this.categoryRepositery.findOne({ where: { id } });
   }
@@ -36,7 +39,7 @@ export class CategoryService {
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
     const category = await this.findOne(id);
     if (!category) {
-      throw new BadRequestException('Category not found');
+      throw new BadRequestException("Category not found");
     }
     Object.assign(category, updateCategoryDto);
     return await this.categoryRepositery.save(category);
@@ -45,7 +48,7 @@ export class CategoryService {
   async remove(id: number) {
     const category = await this.findOne(id);
     if (!category) {
-      throw new BadRequestException('Category not found');
+      throw new BadRequestException("Category not found");
     }
     return await this.categoryRepositery.delete(id);
   }

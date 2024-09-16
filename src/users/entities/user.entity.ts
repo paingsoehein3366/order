@@ -28,9 +28,9 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => Category, (category) => category.userId)
+  @OneToMany(() => Category, (category) => category.user)
   categories: Category[];
 
-  @OneToMany(() => Product, (product) => product.userId)
+  @OneToMany(() => Product, (product) => product.user)
   products: Product[];
 }

@@ -1,9 +1,6 @@
 import { IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateProductDto {
-  @IsNumber()
-  id: number;
-
   @IsString()
   name: string;
 
@@ -15,10 +12,10 @@ export class CreateProductDto {
   image_url: string;
 
   @IsOptional()
-  userId: number;
+  user_id: number;
 
   @IsNumber()
-  categoryId: number;
+  category_id: number;
 
   @IsNumber()
   price: number;
