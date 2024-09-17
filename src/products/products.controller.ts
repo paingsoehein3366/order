@@ -17,9 +17,9 @@ export class ProductsController {
   }
 
   @Get()
-  findAll(@Query() query: any) {
-    console.log("query::: ", query);
-    return this.productsService.findAll(query);
+  findAll(@Query() query: any, @Session() session: any) {
+    const user_id = session?.userId
+    return this.productsService.findAll(query, user_id);
   }
 
   @Get(':id')

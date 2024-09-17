@@ -3,7 +3,7 @@ import { CreateCategoryDto } from "./dto/create-category.dto";
 import { UpdateCategoryDto } from "./dto/update-category.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Category } from "./entities/category.entity";
-import { Repository } from "typeorm";
+import { FindOptionsWhere, Repository } from "typeorm";
 
 @Injectable()
 export class CategoryService {
@@ -17,13 +17,24 @@ export class CategoryService {
     return await this.categoryRepositery.save(createCategoryDto);
   }
 
-  async findAll(query) {
+  async findAll(query: any, user_id: number) {
+    if (!user_id) {
+      throw new BadRequestException("You are not authorized to access this resource");
+    }
     const { skip, limit, search } = query;
+    const whereCondition: FindOptionsWhere<Category>[] = []
+    if (user_id) {
+      whereCondition.push({ user_id })
+    }
+
+    if (search) {
+      whereCondition.push({ name: search })
+    }
     const [data, count] = await this.categoryRepositery.findAndCount({
       order: { createdAt: "DESC" },
       take: limit,
       skip: skip,
-      where: search ? { name: search } : undefined,
+      where: whereCondition,
       relations: ['products'],
     });
     return { data, count };

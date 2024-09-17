@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { CreateProductDto } from "./dto/create-product.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
-import { Repository } from "typeorm";
+import { FindOptionsWhere, Repository } from "typeorm";
 import { Product } from "./entities/product.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { productQueryDto } from "./dto/product-query.dto";
@@ -13,20 +13,30 @@ export class ProductsService {
   ) { }
   async create(createProductDto: CreateProductDto, user_id: number) {
     if (!user_id) {
-      throw new BadRequestException("User not found");
+      throw new BadRequestException("You are not authorized to access this resource");
     }
     createProductDto.user_id = user_id;
-    console.log("createProductDto: ", createProductDto);
 
     return await this.productRepository.save(createProductDto);
   }
 
-  async findAll(query: productQueryDto) {
+  async findAll(query: productQueryDto, user_id: number) {
+    if (!user_id) {
+      throw new BadRequestException("You are not authorized to access this resource");
+    }
     const { skip, limit, search } = query;
+    const whereCondition: FindOptionsWhere<Product>[] = []
+    if (user_id) {
+      whereCondition.push({ user_id })
+    }
+    if (search) {
+      whereCondition.push({ name: search })
+    }
     const [data, count] = await this.productRepository.findAndCount({
       take: limit,
       skip: skip,
-      where: search ? { name: search } : undefined,
+      where: whereCondition,
+      order: { 'createdAt': "DESC" },
       relations: ["category"],
     });
     return { data, count };

@@ -34,8 +34,9 @@ export class CategoryController {
   }
 
   @Get()
-  findAll(@Query() query: any) {
-    return this.categoryService.findAll(query);
+  findAll(@Query() query: any, @Session() session: any) {
+    const user_id = session?.userId;
+    return this.categoryService.findAll(query, user_id);
   }
 
   @Get(":id")
