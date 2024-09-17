@@ -8,13 +8,16 @@ export class Sale {
   id: number;
 
   @Column()
-  product_id: number;
+  product_name: number;
+
+  @Column()
+  price: number;
 
   @Column()
   user_id: number;
 
   @Column()
-  amount: number;
+  total_amount: number;
 
   @Column()
   customer_id?: number;
@@ -29,7 +32,7 @@ export class Sale {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(() => Product)
-  @JoinColumn({ name: 'product_id' })
-  product: Product;
+  // @ManyToMany(() => Product)
+  // @JoinColumn({ name: 'product_id' })
+  // product: Product[];
 }

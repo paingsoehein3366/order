@@ -33,6 +33,12 @@ export class Product {
   @Column()
   category_id: number;
 
+  @Column({ name: 'product_total' })
+  product_total: number;
+
+  @Column({ name: 'expire_date' })
+  expire_date: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 

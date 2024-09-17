@@ -12,7 +12,6 @@ export class ProductsController {
   async create(@Body() createProductDto: CreateProductDto, @Session() session: any) {
     const user_id = session.userId
     const product = await this.productsService.create(createProductDto, user_id);
-
     return product;
   }
 

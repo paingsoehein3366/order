@@ -58,8 +58,8 @@ export class ProductsService {
     if (!product) {
       throw new BadRequestException("Product not found");
     }
-    Object.assign(product, updateProductDto);
-    return await this.productRepository.save(product);
+    Object.assign(updateProductDto, product);
+    return await this.productRepository.save(updateProductDto);
   }
 
   async remove(id: number) {

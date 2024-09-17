@@ -1,14 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Session } from '@nestjs/common';
 import { SaleService } from './sale.service';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { UpdateSaleDto } from './dto/update-sale.dto';
 
 @Controller('sale')
 export class SaleController {
-  constructor(private readonly saleService: SaleService) {}
+  constructor(private readonly saleService: SaleService) { }
 
   @Post()
-  create(@Body() createSaleDto: CreateSaleDto) {
+  create(@Body() createSaleDto: CreateSaleDto, @Session() session: any) {
+    const user_id = session.userId;
+    createSaleDto.user_id = user_id;
     return this.saleService.create(createSaleDto);
   }
 

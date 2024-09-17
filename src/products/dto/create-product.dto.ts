@@ -19,4 +19,10 @@ export class CreateProductDto {
 
   @IsNumber()
   price: number;
+
+  @IsNumber()
+  product_total: number;
+
+  @IsString()
+  expire_date: string;
 }
