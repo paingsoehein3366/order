@@ -22,11 +22,11 @@ export class SaleService {
     const product = await this.productRepository.find({
       where: { id: In(product_id) },
     });
-    const productName = product.map((p) => p.name).toString();
     if (!product.length) {
       throw new BadRequestException("Product not found");
     }
-    return productName;
+
+    return await this.saleRepository.save(createSaleDto);
   }
 
   findAll() {
