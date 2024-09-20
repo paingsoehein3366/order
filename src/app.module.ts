@@ -9,6 +9,7 @@ import { ProductsModule } from './products/products.module';
 import { CategoryModule } from './category/category.module';
 import { SaleModule } from './sale/sale.module';
 import { RolesModule } from './roles/roles.module';
+import { PosModule } from './pos/pos.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { RolesModule } from './roles/roles.module';
     CategoryModule,
     SaleModule,
     RolesModule,
+    PosModule,
   ],
   controllers: [AppController],
   providers: [AppService],
